@@ -2,11 +2,242 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>index</title>
+    <title>test</title>
+    <link href="../js/jquery-easyui-1.5.4.2/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../js/jquery-easyui-1.5.4.2/themes/icon.css" rel="stylesheet" />
     <script src="../js/require.js" data-main="../js/indexmain"></script>
-
 </head>
 <body>
+<!--表格和工具栏-->
+<table id="dg" title="My Users" class="easyui-datagrid" style="width:550px;height:500px"
+       url="/cdstools/school/getAll"
+       toolbar="#toolbar"
+       rownumbers="true" fitColumns="true" singleSelect="true" pagination="true">
+    <thead>
+    <tr>
+        <th field="ck" rowspan="2" checkbox="true"></th>
+        <th field="schoolID" rowspan="2" width="50" formatter="crudyy.formatPrice">schoolID</th>
+        <th colspan="2">Item Details</th>
+    </tr>
+
+    <tr>
+        <th field="schoolName" width="50">schoolName</th>
+        <th field="address" width="50">address</th>
+    </tr>
+    </thead>
+</table>
+<div id="toolbar">
+    <div>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="crudyy.newUser()">New User</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="crudyy.editUser()">Edit User</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="crudyy.destroyUser()">Remove User</a>
+        <span>Item ID:</span>
+    </div>
+
+    <div>
+        Date From: <input id="starttime" class="easyui-datebox" style="width:80px"/>
+        To: <input id="endtime" class="easyui-datebox" style="width:80px"/>
+        Language:
+        <input id="language" class="easyui-combobox" style="width:100px"
+               url="data/combobox_data.json"
+               valueField="id" textField="text"/>
+
+        <input id="itemid" style="line-height:26px;border:1px solid #ccc"/>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="crudyy.doSearch()">Search</a>
+    </div>
+</div>
+
+<!--表单对话框，用来新建和编辑-->
+<div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+     closed="true" buttons="#dlg-buttons">
+    <div class="ftitle">User Information</div>
+    <form id="fm" method="post">
+        <div class="fitem">
+            <label>First Name:</label>
+            <input name="firstname" class="easyui-validatebox" required="true"/>
+        </div>
+        <div class="fitem">
+            <label>Last Name:</label>
+            <input name="lastname" class="easyui-validatebox" required="true"/>
+        </div>
+        <div class="fitem">
+            <label>Phone:</label>
+            <input name="phone"/>
+        </div>
+        <div class="fitem">
+            <label>Email:</label>
+            <input name="email" class="easyui-validatebox" validType="email"/>
+        </div>
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="crudyy.saveUser()">Save</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">Cancel</a>
+</div>
+
+
+<!--动态添加标签页的按钮-->
+<div style="margin-bottom:10px">
+    <a href="#" class="easyui-linkbutton" onclick="crudyy.addTab('google','http://www.google.com')">google</a>
+    <a href="#" class="easyui-linkbutton" onclick="crudyy.addTab('jquery','http://jquery.com/')">jquery</a>
+    <a href="#" class="easyui-linkbutton" onclick="crudyy.addTab('easyui','http://jeasyui.com/')">easyui</a>
+</div>
+<!--tabs-->
+<div id="tt" class="easyui-tabs" style="width:400px;height:500px;">
+    <div title="Home">
+    </div>
+</div>
+
+
+<!--面板控件-->
+<div style="width:200px;height:auto;background:#7190E0;padding:5px;">
+    <div class="easyui-panel" title="Picture Tasks" collapsible="true" style="width:200px;height:auto;padding:10px;">
+        View as a slide show<br/>
+        Order prints online<br/>
+        Print pictures
+    </div>
+    <br/>
+    <div class="easyui-panel" title="File and Folder Tasks" collapsible="true" style="width:200px;height:auto;padding:10px;">
+        Make a new folder<br/>
+        Publish this folder to the Web<br/>
+        Share this folder
+    </div>
+    <br/>
+    <div class="easyui-panel" title="Other Places" collapsible="true" collapsed="true" style="width:200px;height:auto;padding:10px;">
+        New York<br/>
+        My Pictures<br/>
+        My Computer<br/>
+        My Network Places
+    </div>
+    <br/>
+    <div class="easyui-panel" title="Details" collapsible="true" style="width:200px;height:auto;padding:10px;">
+        My documents<br/>
+        File folder<br/><br/>
+        Date modified: Oct.3rd 2010
+    </div>
+</div>
+
+
+<!--easyui布局-->
+<div class="easyui-layout" style="width:400px;height:200px;">
+    <div region="west" split="true" title="Navigator" style="width:150px;">
+        <p style="padding:5px;margin:0;">Select language:</p>
+        <ul>
+            <li><a href="javascript:void(0)" onclick="crudyy.showcontent('java')">Java</a></li>
+            <li><a href="javascript:void(0)" onclick="crudyy.showcontent('cshape')">C#</a></li>
+            <li><a href="javascript:void(0)" onclick="crudyy.showcontent('vb')">VB</a></li>
+            <li><a href="javascript:void(0)" onclick="crudyy.showcontent('erlang')">Erlang</a></li>
+        </ul>
+    </div>
+    <div id="content" region="center" title="Language" style="padding:5px;">
+    </div>
+</div>
+
+<!--easy窗口-->
+<div id="win" class="easyui-window" title="Login" collapsible="false" closed="true" style="width:300px;height:180px;">
+    <form style="padding:10px 20px 10px 40px;">
+        <p>Name: <input type="text"/></p>
+        <p>Pass: <input type="password"/></p>
+        <div style="padding:5px;text-align:center;">
+            <a href="#" class="easyui-linkbutton" icon="icon-ok">Ok</a>
+            <a href="#" class="easyui-linkbutton" icon="icon-cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<!--easyui窗口布局-->
+<div class="easyui-window" title="Layout Window" icon="icon-help" style="width:500px;height:250px;padding:5px;background: #fafafa;">
+    <div class="easyui-layout" fit="true">
+        <div region="west" split="true" style="width:120px;">
+            <ul class="easyui-tree">
+                <li>
+                    <span>Library</span>
+                    <ul>
+                        <li><span>easyui</span></li>
+                        <li><span>Music</span></li>
+                        <li><span>Picture</span></li>
+                        <li><span>Database</span></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div region="center" border="false">
+            <div class="easyui-tabs" fit="true">
+                <div title="Home" style="padding:10px;">
+                    jQuery easyui framework help you build your web page easily.
+                </div>
+                <div title="Contacts">
+                    No contact data.
+                </div>
+            </div>
+        </div>
+        <div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+            <a class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)">Ok</a>
+            <a class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)">Cancel</a>
+        </div>
+    </div>
+</div>
+
+<!--对话框-->
+<div id="dd" class="easyui-dialog" style="padding:5px;width:400px;height:200px;"
+     title="My Dialog" iconCls="icon-ok"
+     toolbar="#dlg-toolbar" buttons="#dlg-buttons1">
+    Dialog Content.
+</div>
+<div id="dlg-toolbar">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="alert('Add')">Add</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="alert('Save')">Save</a>
+</div>
+<div id="dlg-buttons1">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="javascript:alert('Ok')">Ok</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dd').dialog('close')">Cancel</a>
+</div>
+
+<!--使用标记创建树形菜单-->
+<div>
+    <ul class="easyui-tree" checkbox="true">
+        <li>
+            <span>Folder</span>
+            <ul>
+                <li>
+                    <span>Sub Folder 1</span>
+                    <ul>
+                        <li><span>File 11</span></li>
+                        <li><span>File 12</span></li>
+                        <li><span>File 13</span></li>
+                    </ul>
+                </li>
+                <li><span>File 2</span></li>
+                <li><span>File 3</span></li>
+            </ul>
+        </li>
+        <li><span>File21</span></li>
+    </ul>
+</div>
+
+
+<!--easyui表单-->
+<div style="padding:3px 2px;border-bottom:1px solid #ccc">Ajax Form</div>
+<form id="ff" action="form1_proc.php" method="post">
+    <table>
+        <tr>
+            <td>Name:</td>
+            <td><input name="name" type="text"></input></td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td><input name="email" type="text"></input></td>
+        </tr>
+        <tr>
+            <td>Phone:</td>
+            <td><input name="phone" type="text"></input></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Submit"></input></td>
+        </tr>
+    </table>
+</form>
 
 </body>
 </html>
